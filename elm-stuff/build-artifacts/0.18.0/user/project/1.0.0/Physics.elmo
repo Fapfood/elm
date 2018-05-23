@@ -1,0 +1,63 @@
+var _user$project$Physics$gravityConstant = 2;
+var _user$project$Physics$gravityAccel = F2(
+	function (body, body1) {
+		var distanceVect = A2(_user$project$Vector_ops['<->'], body1.position, body.position);
+		var distance = _user$project$Vector$magnitude(distanceVect);
+		var unitDirection = _user$project$Vector$unit(distanceVect);
+		return (_elm_lang$core$Native_Utils.cmp(distance, 0.1) < 0) ? _user$project$Vector$origin : A2(_user$project$Vector_ops['*>'], (_user$project$Physics$gravityConstant * body1.mass) / distance, unitDirection);
+	});
+var _user$project$Physics$applyForce = F2(
+	function (bodies, body) {
+		var resultant = A3(
+			_elm_lang$core$List$foldl,
+			F2(
+				function (x, y) {
+					return A2(_user$project$Vector_ops['<+>'], x, y);
+				}),
+			_user$project$Vector$origin,
+			A2(
+				_elm_lang$core$List$map,
+				_user$project$Physics$gravityAccel(body),
+				bodies));
+		return _elm_lang$core$Native_Utils.update(
+			body,
+			{acceleration: resultant});
+	});
+var _user$project$Physics$smallIntegral = F3(
+	function (vo, v, dt) {
+		return A2(
+			_user$project$Vector_ops['<+>'],
+			vo,
+			A2(_user$project$Vector_ops['<*'], v, dt));
+	});
+var _user$project$Physics_ops = _user$project$Physics_ops || {};
+_user$project$Physics_ops['∮'] = _user$project$Physics$smallIntegral;
+var _user$project$Physics$nextPosition = F2(
+	function (dt, body) {
+		var nextV = A3(_user$project$Physics$smallIntegral, body.velocity, body.acceleration, dt);
+		var nextPos = A3(_user$project$Physics$smallIntegral, body.position, body.velocity, dt);
+		return _elm_lang$core$Native_Utils.update(
+			body,
+			{position: nextPos, velocity: nextV});
+	});
+var _user$project$Physics$nextFrame = F2(
+	function (dt, frame) {
+		return _elm_lang$core$Native_Utils.update(
+			frame,
+			{
+				bodies: A2(
+					_elm_lang$core$List$map,
+					_user$project$Physics$nextPosition(dt),
+					A2(
+						_elm_lang$core$List$map,
+						_user$project$Physics$applyForce(frame.bodies),
+						frame.bodies))
+			});
+	});
+var _user$project$Physics$PointBody = F5(
+	function (a, b, c, d, e) {
+		return {position: a, velocity: b, acceleration: c, mass: d, tag: e};
+	});
+var _user$project$Physics$InertialFrame = function (a) {
+	return {bodies: a};
+};

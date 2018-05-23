@@ -1,0 +1,163 @@
+var _user$project$Main$drawBody = function (body) {
+	var _p0 = {
+		ctor: '_Tuple3',
+		_0: _elm_lang$core$Basics$toString(body.position.x),
+		_1: _elm_lang$core$Basics$toString(body.position.y),
+		_2: _elm_lang$core$Basics$toString(body.mass * 10)
+	};
+	var x = _p0._0;
+	var y = _p0._1;
+	var m = _p0._2;
+	return A2(
+		_elm_lang$svg$Svg$circle,
+		{
+			ctor: '::',
+			_0: _elm_lang$svg$Svg_Attributes$cx(x),
+			_1: {
+				ctor: '::',
+				_0: _elm_lang$svg$Svg_Attributes$cy(y),
+				_1: {
+					ctor: '::',
+					_0: _elm_lang$svg$Svg_Attributes$r(m),
+					_1: {
+						ctor: '::',
+						_0: _elm_lang$svg$Svg_Attributes$fill(body.tag),
+						_1: {ctor: '[]'}
+					}
+				}
+			}
+		},
+		{ctor: '[]'});
+};
+var _user$project$Main$view = function (model) {
+	return A2(
+		_elm_lang$svg$Svg$svg,
+		{
+			ctor: '::',
+			_0: _elm_lang$svg$Svg_Attributes$viewBox(
+				A2(
+					_elm_lang$core$Basics_ops['++'],
+					'0 0 ',
+					A2(
+						_elm_lang$core$Basics_ops['++'],
+						model.width,
+						A2(_elm_lang$core$Basics_ops['++'], ' ', model.height)))),
+			_1: {
+				ctor: '::',
+				_0: _elm_lang$svg$Svg_Attributes$width(model.width),
+				_1: {ctor: '[]'}
+			}
+		},
+		{
+			ctor: '::',
+			_0: A2(
+				_elm_lang$svg$Svg$rect,
+				{
+					ctor: '::',
+					_0: _elm_lang$svg$Svg_Attributes$cx('0'),
+					_1: {
+						ctor: '::',
+						_0: _elm_lang$svg$Svg_Attributes$cy('0'),
+						_1: {
+							ctor: '::',
+							_0: _elm_lang$svg$Svg_Attributes$width(model.width),
+							_1: {
+								ctor: '::',
+								_0: _elm_lang$svg$Svg_Attributes$height(model.height),
+								_1: {
+									ctor: '::',
+									_0: _elm_lang$svg$Svg_Attributes$fill('#5'),
+									_1: {ctor: '[]'}
+								}
+							}
+						}
+					}
+				},
+				{ctor: '[]'}),
+			_1: A2(_elm_lang$core$List$map, _user$project$Main$drawBody, model.frame.bodies)
+		});
+};
+var _user$project$Main$update = F2(
+	function (msg, model) {
+		var _p1 = msg;
+		return A2(
+			_elm_lang$core$Platform_Cmd_ops['!'],
+			_elm_lang$core$Native_Utils.update(
+				model,
+				{
+					frame: A2(_user$project$Physics$nextFrame, 0.1, model.frame)
+				}),
+			{ctor: '[]'});
+	});
+var _user$project$Main$init = A2(
+	_elm_lang$core$Platform_Cmd_ops['!'],
+	{
+		frame: {
+			bodies: {
+				ctor: '::',
+				_0: {
+					position: A2(_user$project$Vector$Vector, 500, 200),
+					velocity: A2(_user$project$Vector$Vector, 0, 0),
+					acceleration: A2(_user$project$Vector$Vector, 0, 0),
+					mass: 8,
+					tag: 'orange'
+				},
+				_1: {
+					ctor: '::',
+					_0: {
+						position: A2(_user$project$Vector$Vector, 500, 100),
+						velocity: A2(_user$project$Vector$Vector, 3, 0),
+						acceleration: A2(_user$project$Vector$Vector, 0, 0),
+						mass: 1,
+						tag: 'brown'
+					},
+					_1: {
+						ctor: '::',
+						_0: {
+							position: A2(_user$project$Vector$Vector, 300, 200),
+							velocity: A2(_user$project$Vector$Vector, 0, 4),
+							acceleration: A2(_user$project$Vector$Vector, 0, 0),
+							mass: 1.5,
+							tag: 'gray'
+						},
+						_1: {
+							ctor: '::',
+							_0: {
+								position: A2(_user$project$Vector$Vector, 500, 500),
+								velocity: A2(_user$project$Vector$Vector, 5, 0),
+								acceleration: A2(_user$project$Vector$Vector, 0, 0),
+								mass: 2,
+								tag: 'blue'
+							},
+							_1: {
+								ctor: '::',
+								_0: {
+									position: A2(_user$project$Vector$Vector, 500, 530),
+									velocity: A2(_user$project$Vector$Vector, 3, 0),
+									acceleration: A2(_user$project$Vector$Vector, 0, 0),
+									mass: 0.4,
+									tag: 'gray'
+								},
+								_1: {ctor: '[]'}
+							}
+						}
+					}
+				}
+			}
+		},
+		width: '1300',
+		height: '700'
+	},
+	{ctor: '[]'});
+var _user$project$Main$Model = F3(
+	function (a, b, c) {
+		return {frame: a, height: b, width: c};
+	});
+var _user$project$Main$Tick = function (a) {
+	return {ctor: 'Tick', _0: a};
+};
+var _user$project$Main$subscriptions = function (model) {
+	return A2(_elm_lang$core$Time$every, _elm_lang$core$Time$millisecond, _user$project$Main$Tick);
+};
+var _user$project$Main$main = _elm_lang$html$Html$program(
+	{init: _user$project$Main$init, view: _user$project$Main$view, update: _user$project$Main$update, subscriptions: _user$project$Main$subscriptions})();
