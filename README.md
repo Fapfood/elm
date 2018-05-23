@@ -6,7 +6,11 @@ If elm isn't installed in your system, install it [here](https://guide.elm-lang.
 
 Afterwards, type this in your terminal:
 ``` shellsession
+$ elm package install
 $ elm-reactor
-elm-reactor 0.18.0
-Listening on http://localhost:8000
 ```
+
+Go to:
+`http://localhost:8000`
+
+Run appropriate elm file in web browser and run python server next.
