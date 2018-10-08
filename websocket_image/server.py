@@ -24,11 +24,10 @@ async def hello(websocket, path):
     bodies = []
     for _ in range(10):
         x = random.randint(0, 1300)
-        y = 0
         y = random.randint(0, 700)
         color = random.sample(COLORS, 1)[0]
         kind = random.sample(KINDS, 1)[0]
-        bodies.append({'position': {'x': x, 'y': y}, 'color': color, 'kind': kind})
+        bodies.append({'position': {'x': x, 'y': y}, 'color': color, 'kind': kind, 'rotation': 30})
     d = {'bodies': bodies}
     message = str(d).replace("'", '"')
     await websocket.send(message)
