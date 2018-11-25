@@ -30,6 +30,7 @@ prepare part =
         "r" -> prepareR part
         "c" -> prepareC part
         "p" -> prepareP part
+        "e" -> prepareE part
         _   -> (\(x_val, y_val, color, angle) -> rect [ x (toString x_val), y (toString y_val), width "10", height "10", fill color ] [])
 
 
@@ -58,6 +59,20 @@ prepareC part =
         y_fun = \y_val -> toString (y_val + y_move)
     in
         (\(x_val, y_val, color, angle) -> circle [ cx (x_fun x_val), cy (y_fun y_val), r r_val, fill color, transform (rotator angle x_val y_val) ] [])
+
+
+prepareE : Part -> ( Int, Int, String, Int ) -> Svg msg
+prepareE part =
+    let
+        (x_move, y_move, x_radius, y_radius) = case part.value of
+            [a, b, c, d] -> (a, b, c, d)
+            _ -> (0, 0, 0, 0)
+        r_x_val = toString x_radius
+        r_y_val = toString y_radius
+        x_fun = \x_val -> toString (x_val + x_move)
+        y_fun = \y_val -> toString (y_val + y_move)
+    in
+        (\(x_val, y_val, color, angle) -> ellipse [ cx (x_fun x_val), cy (y_fun y_val), rx r_x_val, ry r_y_val, fill color, transform (rotator angle x_val y_val) ] [])
 
 
 prepareP : Part -> ( Int, Int, String, Int ) -> Svg msg
