@@ -77,6 +77,6 @@ view model =
         h = toString model.height
     in
     svg [ viewBox ("0 0 " ++ w ++ " " ++ h), width w ]
-        (rect [ cx "0", cy "0", width w, height h, fill "#5" ] []
+        (rect [ cx "0", cy "0", width w, height h, fill "black" ] []
             :: List.foldr (++) [] (List.map (flip drawBody model.config) model.frame.bodies)
         )
