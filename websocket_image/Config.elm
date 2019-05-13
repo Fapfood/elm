@@ -1,13 +1,14 @@
-module Config exposing (Configuration, Config, Object, Part, configurationDecoder)
+module Config exposing (Configuration, Config, Object, Part, configurationDecoder, updateConfig)
 
 
-import Json.Decode exposing (field, int, list, map2, map3, string)
+import Json.Decode exposing (field, int, list, map2, map4, string)
 
 
 type alias Configuration =
     { config : Config
     , width: Int
     , height : Int
+    , color : String
     }
 
 type alias Config = List Object
@@ -29,4 +30,7 @@ objectDecoder = map2 Object (field "name" string) (field "parts" (list partDecod
 
 configDecoder = list objectDecoder
 
-configurationDecoder = map3 Configuration (field "config" configDecoder) (field "width" int) (field "height" int)
+configurationDecoder = map4 Configuration (field "config" configDecoder) (field "width" int) (field "height" int) (field "color" string)
+
+updateConfig : Config -> Config -> Config
+updateConfig oldConfig newConfig = newConfig

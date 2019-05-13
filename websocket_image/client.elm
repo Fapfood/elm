@@ -27,6 +27,7 @@ type alias Model =
     , config : Config
     , width : Int
     , height : Int
+    , color: String
     }
 
 
@@ -37,6 +38,7 @@ init =
         , config = []
         , width = 0
         , height = 0
+        , color = "black"
         }
     , Cmd.none
     )
@@ -53,9 +55,9 @@ update msg model =
     Message message ->
        let
            m = case decodeString frameDecoder message of
-               Ok frame -> Model frame model.config model.width model.height
+               Ok frame -> Model frame model.config model.width model.height model.color
                Err msg -> case decodeString configurationDecoder message of
-                   Ok configuration -> Model model.frame configuration.config configuration.width configuration.height
+                   Ok configuration -> Model model.frame (updateConfig model.config configuration.config) configuration.width configuration.height configuration.color
                    Err msg -> model
        in
           (m, Cmd.none)
@@ -77,6 +79,6 @@ view model =
         h = toString model.height
     in
     svg [ viewBox ("0 0 " ++ w ++ " " ++ h), width w ]
-        (rect [ cx "0", cy "0", width w, height h, fill "black" ] []
+        (rect [ cx "0", cy "0", width w, height h, fill model.color ] []
             :: List.foldr (++) [] (List.map (flip drawBody model.config) model.frame.bodies)
         )
